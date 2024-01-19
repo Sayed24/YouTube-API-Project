@@ -7,9 +7,22 @@
     <title>YouTube API Project</title>
 </head>
 <body>
+    <div id="res"></div>
+
+
     
     <script>
         // https://www.googleapis.com/youtube/v3/search?part=snippet&q=car&key=AIzaSyB4owScDCee8jUjHzHSPVLj6L9gso9BT8M
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+            // Typical action to be performed when the document is ready:
+            document.getElementById("res").innerHTML = xhttp.responseText;
+            }
+        };
+        xhttp.open("GET", "https://www.googleapis.com/youtube/v3/search?part=snippet&q=car&key=AIzaSyB4owScDCee8jUjHzHSPVLj6L9gso9BT8M", true);
+        xhttp.send();
     </script>
 </body>
 </html>
