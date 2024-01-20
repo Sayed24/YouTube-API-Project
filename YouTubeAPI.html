@@ -5,17 +5,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube API Project</title>
+
+    <style>
+        * {
+            margin: 5px 0;
+        }
+        body {
+            text-align: center;
+        }
+
+        #search-bar {
+            width: 40%;
+            height: 30px;
+            margin: 30px;
+        }
+
+        #video-divs {
+            display: flex;
+            flex-wrap: wrap;
+            text-align: left;
+
+        }
+        .video-div {
+            width: 33%;
+        }
+
+        img {
+            width: 90%;
+        }
+
+    </style>
+
 </head>
 <body>
-    <input type="text" placeholder="Search">
+    <form id="search-form">
+        <input id="search-bar" type="text" placeholder="Search">
+    </form>
     <div id="video-divs"></div>
 
 
     
     <script>
-        // https://www.googleapis.com/youtube/v3/search?part=snippet&q=car&key=AIzaSyB4owScDCee8jUjHzHSPVLj6L9gso9BT8M
-
-        var xhttp = new XMLHttpRequest();
+        let searchForm = document.querySelector('#search-form');
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+        let xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
             // Typical action to be performed when the document is ready:
@@ -25,14 +60,27 @@
             });
 
             let container = document.querySelector('#video-divs');
+            container.innerHTML = '';
             videoData.forEach(function(video) {
                 console.log(video);
                 let videoDiv = document.createElement('div');
+                videoDiv.classList.add('video-div')
+                videoDiv.innerHTML = `
+                    <img src=${video.thumbnails.high.url}>
+                    <h4>${video.title}</h4>
+                    <p>${video.channelTitle}</p>
+                    <p>${new Date(video.publishTime).toLocaleDateString()}</p>
+                `
+                container.appendChild(videoDiv);
             })
             }
         };
-        xhttp.open("GET", "https://www.googleapis.com/youtube/v3/search?part=snippet&q=car&key=AIzaSyB4owScDCee8jUjHzHSPVLj6L9gso9BT8M", true);
+        let textValue = document.querySelector('#search-bar').value
+        xhttp.open("GET", `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${textValue}&maxResults=12&key=AIzaSyB4owScDCee8jUjHzHSPVLj6L9gso9BT8M`, true);
         xhttp.send();
+
+        })
+
     </script>
 </body>
 </html>
